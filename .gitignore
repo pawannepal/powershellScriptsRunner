@@ -3,9 +3,12 @@
 # Compiled output
 /dist
 /dist-electron
+/dist-electron-*/
+/portable-build
 /tmp
 /out-tsc
 /bazel-out
+/win-unpacked
 
 # Node
 /node_modules
@@ -50,3 +53,14 @@ Thumbs.db
 *.ntvs*
 *.njsproj
 *.sln
+*.exe
+*.msi
+*.zip
+*.tar.gz
+*.dmg
+*.pkg
+*.blockmap
+
+# Build artifacts
+*.js.map
+*.css.map

@@ -5,10 +5,13 @@
   "main": "dist/main.js",
   "scripts": {
     "start": "tsc -p tsconfig.electron.json && ng build && electron .",
-    "build": "tsc -p tsconfig.electron.json && ng build --configuration production && electron-builder",
+    "clean": "node scripts/clean.js",
+    "build": "npm run clean && tsc -p tsconfig.electron.json && ng build --configuration production && electron-builder",
+    "build:portable": "npm run clean && tsc -p tsconfig.electron.json && ng build --configuration production && electron-builder --win portable",
+    "build:all": "npm run clean && tsc -p tsconfig.electron.json && ng build --configuration production && electron-builder --win nsis portable",
     "dev": "concurrently \"tsc -p tsconfig.electron.json -w\" \"ng serve\" \"electron-forge start\"",
-    "package": "ng build --configuration production && electron-forge package",
-    "make": "ng build --configuration production && electron-forge make",
+    "package": "npm run clean && ng build --configuration production && electron-forge package",
+    "make": "npm run clean && ng build --configuration production && electron-forge make",
     "ng": "ng"
   },
   "author": "Your Name",

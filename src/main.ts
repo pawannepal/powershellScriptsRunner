@@ -211,7 +211,9 @@ function generatePowershellScript(scriptPaths: string[], baseDir: string): strin
   const scriptsArray = scriptPaths.map(scriptPath => {
     const scriptName = path.basename(scriptPath, path.extname(scriptPath))
       .replace(/^start_/, '');
-    return `    @{ name = "${scriptName}"; path = "${scriptPath}" }`;
+    // Properly format the path to avoid extra spaces or escape characters
+    const formattedPath = scriptPath.trim().replace(/\\/g, '\\\\');
+    return `    @{ name = "${scriptName}"; path = "${formattedPath}" }`;
   }).join(',\n');
 
   const scriptBody = [
@@ -222,12 +224,12 @@ function generatePowershellScript(scriptPaths: string[], baseDir: string): strin
     `    Write-Host "Starting $($script.name) script..."`,
     `    try {`,
     `        if ($firstScript) {`,
-    `            # First tab (new window) using cmd.exe instead of pwsh to avoid module issues`,
-    `            wt.exe -d "${baseDir}" --title "$($script.name)" cmd.exe /k "PowerShell.exe -NoProfile -ExecutionPolicy Bypass -Command \\"\\$host.ui.RawUI.WindowTitle = '$($script.name)'; & '$($script.path)'\\""`,
+    `            # First tab (new window) using cmd.exe instead of pwsh`,
+    `            wt.exe -d "${baseDir}" --title "$($script.name)" cmd.exe /k "PowerShell.exe -NoProfile -ExecutionPolicy Bypass -File "$($script.path)""`,
     `            $firstScript = $false`,
     `        } else {`,
-    `            # Subsequent tabs in same window using cmd.exe instead of pwsh`,
-    `            wt.exe -w 0 nt --title "$($script.name)" -d "${baseDir}" cmd.exe /k "PowerShell.exe -NoProfile -ExecutionPolicy Bypass -Command \\"\\$host.ui.RawUI.WindowTitle = '$($script.name)'; & '$($script.path)'\\""`,
+    `            # Subsequent tabs in same window using cmd.exe`,
+    `            wt.exe -w 0 nt --title "$($script.name)" -d "${baseDir}" cmd.exe /k "PowerShell.exe -NoProfile -ExecutionPolicy Bypass -File "$($script.path)""`,
     `        }`,
     `        Start-Sleep -Seconds 1`,
     `    } catch {`,

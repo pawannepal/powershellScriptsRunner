@@ -9,6 +9,7 @@ An Electron application built with Angular 18 to launch PowerShell scripts in Wi
 - Filter and select scripts to run
 - Preview script contents
 - Launch scripts in Windows Terminal
+- Available as both installer and portable executable
 
 ## Usage
 
@@ -74,11 +75,34 @@ npm run dev
 ### Build
 
 ```bash
-# Build for production
+# Build for production (installer)
 npm run build
 
-# Package the application
-npm run make
+# Build portable executable
+npm run build:portable
+
+# Build both installer and portable versions
+npm run build:all
+```
+
+### Building Portable Version
+
+The portable version creates a standalone executable that doesn't require installation:
+
+1. Run `npm run build:portable` to generate the portable executable
+2. Find the executable in the `dist-electron` directory
+3. The portable executable can be run directly from any location without installation
+
+### Cleaning the Build
+
+The project includes a custom cleaning script that:
+- Removes previous build artifacts
+- Terminates any running instances of the application
+- Cleans up temporary files
+
+Run this manually with:
+```bash
+npm run clean
 ```
 
 ## Technology Stack
@@ -88,3 +112,24 @@ npm run make
 - Signal-based state management for reactive UI
 - TypeScript for type safety
 - SCSS for styling
+- Windows Terminal integration for launching scripts
+- PowerShell script execution
+
+## Directory Structure
+
+```
+scripts/             - Build and utility scripts
+src/
+  ├── main.ts        - Electron main process
+  ├── preload.ts     - Preload script for secure IPC
+  └── renderer/      - Angular application
+      ├── app/       - Application code
+      │   ├── components/   - UI components
+      │   ├── models/       - Data models
+      │   └── services/     - Application services
+      └── assets/    - Application assets
+```
+
+## License
+
+MIT
