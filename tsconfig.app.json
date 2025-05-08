@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc/app",
+    "types": ["node"],
+    "paths": {
+      "*": ["node_modules/*", "src/*"]
+    }
+  },
+  "files": [
+    "src/renderer/main.ts"
+  ],
+  "include": [
+    "src/renderer/**/*.d.ts"
+  ]
+}
